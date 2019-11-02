@@ -44,7 +44,7 @@ function draw() {
   // appends a 'group' element to 'svg'
   // moves the 'group element to the top left margin
   const svg = d3
-    .select("body")
+    .select(".happy-div")
     .append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight)
@@ -96,7 +96,7 @@ function draw() {
     .text("Price");
 
   const widthTextBox = d3
-    .select("body")
+    .select(".happy-div")
     .append("div")
     .append("input")
     .attr("class", "text-box form-control")
@@ -111,14 +111,14 @@ function draw() {
       tearDown();
       draw();
     });
-  const div = d3.select("body").select("div");
+  const div = d3.select(".happy-div").select("div");
   div
     .style("width", svgWidth + "px")
     .style("padding-left", margin.left + "px")
     .style("padding-right", margin.right + "px");
 
   const heightTextBox = d3
-    .select("body")
+    .select(".happy-div")
     .select("div")
     .append("input")
     .attr("class", "text-box form-control")
@@ -256,7 +256,7 @@ function draw() {
 }
 draw();
 function tearDown() {
-  d3.select("body")
+  d3.select(".happy-div")
     .selectAll("*")
     .remove();
 }
