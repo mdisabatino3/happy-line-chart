@@ -1,8 +1,11 @@
 import * as d3 from "d3";
+import { deflateRaw } from "zlib";
 // set the dimensions and margins of the graph
 const margin = { top: 20, right: 20, bottom: 30, left: 50 };
-const width = 960 - margin.left - margin.right;
-const height = 500 - margin.top - margin.bottom;
+var svgWidth = 960;
+var svgHeight = 500;
+var width = svgWidth - margin.left - margin.right;
+var height = svgHeight - margin.top - margin.bottom;
 
 // function for parsing the date / time
 const parseTime = d3.timeParse("%d-%b-%y");
@@ -24,8 +27,8 @@ const valueline = d3
 const svg = d3
   .select("body")
   .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
+  .attr("width", svgWidth)
+  .attr("height", svgHeight)
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -38,6 +41,112 @@ function makeXGridlines() {
 function makeYGridlines() {
   return d3.axisLeft(y).ticks(5);
 }
+
+//  add the x gridlines
+svg
+  .append("g")
+  .attr("class", "grid")
+  .attr("transform", "translate(0," + height + ")")
+  .call(
+    makeXGridlines()
+      .tickSize(-height)
+      .tickFormat("")
+  )
+  .append("text")
+  .attr("class", "axis-title")
+  .attr("transform", "rotate(0)")
+  .attr("y", -20)
+  .attr("x", width - 30)
+  .attr("dy", ".71em")
+  .text("Date");
+
+// add y gridlines
+svg
+  .append("g")
+  .attr("class", "grid axis axis--y")
+  .call(
+    makeYGridlines()
+      .tickSize(-width)
+      .tickFormat("")
+  )
+  .append("text")
+  .attr("class", "axis-title")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 10)
+  .attr("x", -10)
+  .attr("dy", ".71em")
+  .text("Price");
+
+// create focus area
+const focus = svg
+  .append("g")
+  .attr("class", "focus")
+  .style("display", "none");
+
+focus
+  .append("line")
+  .attr("class", "x-hover-line hover-line")
+  .attr("y1", 0)
+  .attr("y2", height);
+
+focus
+  .append("line")
+  .attr("class", "y-hover-line hover-line")
+  .attr("x1", 0)
+  .attr("x2", width);
+
+focus.append("circle").attr("r", 6);
+
+// backdrop for tooltip
+focus
+  .append("rect")
+  .attr("class", "tooltip")
+  .attr("width", "200")
+  .attr("height", "60")
+  .attr("y", "-4em")
+  .attr("x", "20")
+  .attr("rx", "5")
+  .attr("ry", "5");
+
+const focusText = focus.append("text").attr("class", "textBox");
+
+focusText
+  .append("tspan")
+  .attr("class", "tooltip-text")
+  .attr("x", "25")
+  .attr("dy", "-1em");
+
+focusText
+  .append("tspan")
+  .attr("class", "tooltip-text")
+  .attr("x", "25")
+  .attr("dy", "-1.2em");
+
+const widthTextBox = d3
+  .select("body")
+  .append("input")
+  .attr("class", "text-box")
+  .attr("type", "number")
+  .attr("id", "width-text-box")
+  .attr("min", 0)
+  .attr("value", 960)
+  .on("change", () => {
+    var newWidth = d3.select(this).property("value");
+    svgWidth = newWidth;
+  });
+
+const heightTextBox = d3
+  .select("body")
+  .append("input")
+  .attr("class", "text-box")
+  .attr("type", "number")
+  .attr("id", "height-text-box")
+  .attr("min", 0)
+  .attr("value", 500)
+  .on("change", () => {
+    var newHeight = d3.select("#height-text-box").property("value");
+    svgHeight = newHeight;
+  });
 
 // get the data
 d3.csv("src/data.csv").then(function(data) {
@@ -55,41 +164,6 @@ d3.csv("src/data.csv").then(function(data) {
     d3.max(data, d => d.close) * 1.05
   ]);
 
-  //  add the x gridlines
-  svg
-    .append("g")
-    .attr("class", "grid")
-    .attr("transform", "translate(0," + height + ")")
-    .call(
-      makeXGridlines()
-        .tickSize(-height)
-        .tickFormat("")
-    )
-    .append("text")
-    .attr("class", "axis-title")
-    .attr("transform", "rotate(0)")
-    .attr("y", -20)
-    .attr("x", width - 30)
-    .attr("dy", ".71em")
-    .text("Date");
-
-  // add y gridlines
-  svg
-    .append("g")
-    .attr("class", "grid axis axis--y")
-    .call(
-      makeYGridlines()
-        .tickSize(-width)
-        .tickFormat("")
-    )
-    .append("text")
-    .attr("class", "axis-title")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 10)
-    .attr("x", -10)
-    .attr("dy", ".71em")
-    .text("Price");
-
   // create the path and add valueline to path
   // add the valueline to the path
   svg
@@ -98,51 +172,8 @@ d3.csv("src/data.csv").then(function(data) {
     .attr("class", "line")
     .attr("d", valueline);
 
-  // create focus area
-  const focus = svg
-    .append("g")
-    .attr("class", "focus")
-    .style("display", "none");
-
-  focus
-    .append("line")
-    .attr("class", "x-hover-line hover-line")
-    .attr("y1", 0)
-    .attr("y2", height);
-
-  focus
-    .append("line")
-    .attr("class", "y-hover-line hover-line")
-    .attr("x1", 0)
-    .attr("x2", width);
-
-  focus.append("circle").attr("r", 6);
-
-  // backdrop for tooltip
-  focus
-    .append("rect")
-    .attr("class", "tooltip")
-    .attr("width", "200")
-    .attr("height", "60")
-    .attr("y", "-4em")
-    .attr("x", "20")
-    .attr("rx", "5")
-    .attr("ry", "5");
-
-  const focusText = focus.append("text").attr("class", "textBox");
-
-  focusText
-    .append("tspan")
-    .attr("class", "tooltip-text")
-    .attr("x", "25")
-    .attr("dy", "-1em");
-
-  focusText
-    .append("tspan")
-    .attr("class", "tooltip-text")
-    .attr("x", "25")
-    .attr("dy", "-1.2em");
-
+  // append area for pulling mouseovers and calling function to display lines
+  // and text boxes
   svg
     .append("rect")
     .attr("transform", "translate(" + 0 + "," + 0 + ")")
