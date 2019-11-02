@@ -13,6 +13,13 @@ text {
   color: #081f2c;
 }
 
+.text-box {
+  display: block;
+  margin: 1em;
+  font-size: 1em;
+  font-family: "Roboto", "Fira Sans", sans-serif;
+}
+
 .grid line {
   stroke: #d4d8da;
   shape-rendering: crispEdges;
@@ -29,6 +36,7 @@ text {
 
 .tooltip {
   fill: #b894f6;
+  opacity: 70%;
 }
 
 .tooltip-text {
