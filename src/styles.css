@@ -66,8 +66,15 @@ text {
 
 .line {
   fill: none;
+  fill-opacity: 30%;
   stroke: #03dac5;
   stroke-width: 4px;
+}
+
+.area {
+  fill: #03dac5;
+  fill-opacity: 30%;
+  z-index: 1;
 }
 
 .overlay {
