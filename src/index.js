@@ -104,8 +104,9 @@ function draw() {
     .attr("id", "width-text-box")
     .attr("min", 0)
     .attr("value", svgWidth)
+    .attr("step", 10)
     .on("change", () => {
-      var newWidth = d3.select("#width-text-box").property("value");
+      let newWidth = d3.select("#width-text-box").property("value");
       setNewWidth(newWidth);
       tearDown();
       draw();
@@ -125,8 +126,9 @@ function draw() {
     .attr("id", "height-text-box")
     .attr("min", 0)
     .attr("value", svgHeight)
+    .attr("step", 10)
     .on("change", () => {
-      var newHeight = d3.select("#height-text-box").property("value");
+      let newHeight = d3.select("#height-text-box").property("value");
       setNewHeight(newHeight);
       tearDown();
       draw();
