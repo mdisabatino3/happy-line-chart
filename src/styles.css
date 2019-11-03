@@ -46,12 +46,12 @@ text {
 
 .tooltip {
   fill: #b894f6;
-  opacity: 70%;
+  opacity: 0.9;
 }
 
 .tooltip-text {
   fill: #ffffff;
-  opacity: "87%";
+  opacity: 0.87;
 }
 
 .tick line {
@@ -76,7 +76,7 @@ text {
 .axis path,
 .axis line {
   fill: none;
-  opacity: 70%;
+  opacity: 0.7;
   stroke: #d4d8da;
   stroke-width: 2px;
   shape-rendering: crispEdges;
@@ -84,14 +84,13 @@ text {
 
 .line {
   fill: none;
-  fill-opacity: 30%;
   stroke: #03dac5;
   stroke-width: 4px;
 }
 
 .area {
   fill: #03dac5;
-  fill-opacity: 30%;
+  opacity: 0.3;
   z-index: 1;
 }
 
