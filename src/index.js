@@ -58,6 +58,8 @@ function draw() {
     .attr("cursor", "move")
     .on("mousedown", function() {
       var startPos = d3.mouse(d3.select("body").node());
+      var deltaX;
+      var deltaY;
       console.log("start pos " + startPos);
       var w = d3
         .select("body")
@@ -65,13 +67,15 @@ function draw() {
         .on("mouseup", mouseup);
       function mousemove() {
         var newPosition = d3.mouse(this);
-        var deltaX = newPosition[0] - startPos[0];
-        var deltaY = newPosition[1] - startPos[1];
+        deltaX = newPosition[0] - startPos[0];
+        deltaY = newPosition[1] - startPos[1];
         d3.select(".happy-div")
           .style("left", posX + deltaX + "px")
           .style("top", posY + deltaY + "px");
       }
       function mouseup() {
+        posX = posX + deltaX;
+        posY = posY + deltaY;
         w.on("mousemove", null);
         w.on("mouseup", null);
       }

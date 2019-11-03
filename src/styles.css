@@ -20,6 +20,10 @@ text {
   background-color: #f1f1f1;
   border-color: #6e6b6b;
   text-align: center;
+  left: 20px;
+  top: 100px;
+  width: 960px;
+  height: 500px;
 }
 
 .text-box {
