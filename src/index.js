@@ -5,6 +5,8 @@ var svgWidth = 960;
 var svgHeight = 500;
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
+var posX = 20;
+var posY = 100;
 
 function setNewWidth(newSvgWidth) {
   svgWidth = newSvgWidth;
@@ -40,7 +42,43 @@ function draw() {
     .x(d => x(d.date))
     .y(d => y(d.close));
 
-  const happyDiv = d3.select(".happy-div").style("width", svgWidth + "px");
+  const happyDiv = d3
+    .select(".happy-div")
+    .style("width", svgWidth + "px")
+    .style("left", posX + "px")
+    .style("top", posY + "px");
+
+  // drag handle and styles
+  const dragHandle = happyDiv
+    .append("svg")
+    .attr("class", "drag-handle")
+    .attr("width", "24")
+    .attr("height", "24")
+    .attr("viewBox", "0 0 24 24")
+    .attr("cursor", "move")
+    .on("mousedown", function() {
+      var startPos = d3.mouse(d3.select("body").node());
+      console.log("start pos " + startPos);
+      var w = d3
+        .select("body")
+        .on("mousemove", mousemove)
+        .on("mouseup", mouseup);
+      function mousemove() {
+        var newPosition = d3.mouse(this);
+        var deltaX = newPosition[0] - startPos[0];
+        var deltaY = newPosition[1] - startPos[1];
+        d3.select(".happy-div")
+          .style("left", posX + deltaX + "px")
+          .style("top", posY + deltaY + "px");
+      }
+      function mouseup() {
+        w.on("mousemove", null);
+        w.on("mouseup", null);
+      }
+    })
+    .append("path")
+    .attr("d", "M20 9H4v2h16V9zM4 15h16v-2H4v2z");
+
   // append the svg object to the body of the page
   // appends a 'group' element to 'svg'
   // moves the 'group element to the top left margin

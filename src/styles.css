@@ -5,12 +5,21 @@ svg {
 body {
   background-color: #f1f3f3;
   font-family: "Roboto", "Fira Sans", sans-serif;
+  height: 100vh;
 }
 
 text {
   font-weight: 500;
   font-size: 18px;
   color: #081f2c;
+}
+
+.happy-div {
+  position: absolute;
+  z-index: 9;
+  background-color: #f1f1f1;
+  border-color: #6e6b6b;
+  text-align: center;
 }
 
 .text-box {
